@@ -1,0 +1,29 @@
+{
+  "name": "ElBruno.NetAgent full blueprint",
+  "created_utc": "2026-04-30T17:13:01.049588Z",
+  "files": [
+    ".github/ISSUE_TEMPLATE/bug_report.md",
+    ".github/ISSUE_TEMPLATE/feature_request.md",
+    ".github/workflows/ci.yml",
+    ".github/workflows/publish.yml",
+    ".gitignore",
+    "LICENSE",
+    "README.md",
+    "docs/ARCHITECTURE.md",
+    "docs/CHANGELOG.md",
+    "docs/CONFIGURATION.md",
+    "docs/DEVELOPER_NOTES.md",
+    "docs/IMAGE_PROMPTS.md",
+    "docs/IMPLEMENTATION.md",
+    "docs/PRD.md",
+    "docs/PROMOTION.md",
+    "docs/PUBLISHING.md",
+    "docs/REPO_RULES.md",
+    "docs/ROADMAP.md",
+    "docs/SECURITY.md",
+    "docs/SQUAD_EXECUTION_PROMPT.md",
+    "docs/TROUBLESHOOTING.md",
+    "docs/config.sample.json",
+    "prompts/initial-squad-prompt.txt"
+  ]
+}

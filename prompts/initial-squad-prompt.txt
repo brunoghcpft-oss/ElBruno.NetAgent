@@ -1,0 +1,15 @@
+You are implementing ElBruno.NetAgent.
+
+Read docs/IMPLEMENTATION.md and implement Phase 0 only.
+
+Use .NET 10.
+Use WPF.
+Keep the app Windows-first.
+Do not implement networking logic yet.
+Create the solution, projects, folders, README, LICENSE, CI workflow, and placeholder app.
+
+After implementation:
+- run dotnet build
+- run dotnet test
+- summarize files changed
+- stop

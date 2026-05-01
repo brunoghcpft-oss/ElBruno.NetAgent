@@ -1,0 +1,31 @@
+{
+  "AutoModeEnabled": false,
+  "DryRunMode": true,
+  "CheckIntervalSeconds": 5,
+  "PingTimeoutMs": 1000,
+  "LatencyThresholdMs": 180,
+  "PacketLossThresholdPercent": 20,
+  "FailoverDurationSeconds": 20,
+  "FailbackCooldownSeconds": 120,
+  "MinimumChecksBeforeSwitch": 3,
+  "MinimumScoreDeltaToSwitch": 20,
+  "PreferredAdapterKinds": [
+    "UsbTethering",
+    "Ethernet",
+    "WiFi"
+  ],
+  "IgnoredAdapterNameContains": [
+    "Loopback",
+    "VirtualBox",
+    "Hyper-V",
+    "VMware"
+  ],
+  "PingEndpoints": [
+    "1.1.1.1",
+    "8.8.8.8",
+    "9.9.9.9"
+  ],
+  "LogLevel": "Information",
+  "ShowNotifications": true,
+  "StartMinimizedToTray": true
+}

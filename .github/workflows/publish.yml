@@ -1,0 +1,65 @@
+name: Publish
+
+on:
+  release:
+    types:
+      - published
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Optional version override, for example 0.1.0-beta.1'
+        required: false
+        type: string
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    name: Publish package
+    runs-on: windows-latest
+    environment: release
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore
+        run: dotnet restore ElBruno.NetAgent.sln
+
+      - name: Build
+        run: dotnet build ElBruno.NetAgent.sln --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test ElBruno.NetAgent.sln --configuration Release --no-build --verbosity normal
+
+      - name: Pack
+        run: dotnet pack src/ElBruno.NetAgent/ElBruno.NetAgent.csproj --configuration Release --no-build --output artifacts/packages
+
+      - name: NuGet Login
+        id: login
+        uses: NuGet/login@v1
+        with:
+          user: ${{ secrets.NUGET_USER }}
+
+      - name: Push packages
+        shell: pwsh
+        run: |
+          Get-ChildItem artifacts/packages -Filter *.nupkg | ForEach-Object {
+            dotnet nuget push $_.FullName `
+              --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" `
+              --source https://www.nuget.org/api/v2/package `
+              --skip-duplicate
+          }
+
+      - name: Upload packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: packages
+          path: artifacts/packages
