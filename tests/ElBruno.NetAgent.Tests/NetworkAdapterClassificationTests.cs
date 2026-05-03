@@ -16,14 +16,14 @@ public class NetworkAdapterClassificationTests
     }
 
     [Fact]
-    public async void GetInterfacesAsync_ReturnsAtLeastOneInterface()
+    public async Task GetInterfacesAsync_ReturnsAtLeastOneInterface()
     {
         var interfaces = await _service.GetInterfacesAsync();
         Assert.NotEmpty(interfaces);
     }
 
     [Fact]
-    public async void GetInterfacesAsync_AllInterfacesHaveNonNullId()
+    public async Task GetInterfacesAsync_AllInterfacesHaveNonNullId()
     {
         var interfaces = await _service.GetInterfacesAsync();
         foreach (var iface in interfaces)
@@ -34,7 +34,7 @@ public class NetworkAdapterClassificationTests
     }
 
     [Fact]
-    public async void GetInterfacesAsync_AllInterfacesHaveNonNullName()
+    public async Task GetInterfacesAsync_AllInterfacesHaveNonNullName()
     {
         var interfaces = await _service.GetInterfacesAsync();
         foreach (var iface in interfaces)
@@ -45,7 +45,7 @@ public class NetworkAdapterClassificationTests
     }
 
     [Fact]
-    public async void GetInterfacesAsync_CandidatesHaveUpState()
+    public async Task GetInterfacesAsync_CandidatesHaveUpState()
     {
         var interfaces = await _service.GetInterfacesAsync();
         var candidates = interfaces.Where(i => i.IsCandidate);
@@ -58,7 +58,7 @@ public class NetworkAdapterClassificationTests
     }
 
     [Fact]
-    public async void GetInterfacesAsync_ActiveInterfaceIsCandidate()
+    public async Task GetInterfacesAsync_ActiveInterfaceIsCandidate()
     {
         var interfaces = await _service.GetInterfacesAsync();
         var upInterfaces = interfaces.Where(i => i.OperationalState == Core.Models.NetworkOperationalState.Up);

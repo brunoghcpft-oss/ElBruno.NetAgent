@@ -113,7 +113,7 @@ public class NetworkInventoryService : INetworkInventoryService
 
     private static bool IsVirtualAdapter(string description, string name)
     {
-        var virtualKeywords = new[] { "virtualbox", "hyper-v", "vmware", "vmware", "vpci", "wsl" };
+        var virtualKeywords = new[] { "virtualbox", "hyper-v", "vmware", "vpci", "wsl" };
         return virtualKeywords.Any(kw => description.Contains(kw, StringComparison.Ordinal) || name.Contains(kw, StringComparison.Ordinal));
     }
 
