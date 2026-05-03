@@ -48,6 +48,7 @@ public partial class App : Application
                     context.Configuration.GetSection("NetAgent"));
 
                 // Register services
+                services.AddSingleton<Services.Configuration.IConfigurationService, Services.Configuration.ConfigurationService>();
                 services.AddSingleton<TrayIconService>();
 
                 // Register hosted service for tray lifecycle
