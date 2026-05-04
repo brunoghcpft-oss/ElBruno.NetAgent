@@ -24,12 +24,14 @@
     <PackageTags>network;quality;tray;monitoring;wifi;tethering;connection;WPF;.NET;dry-run</PackageTags>
     <PackageProjectUrl>https://github.com/brunoghcpft-oss/ElBruno.NetAgent</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>elbruno-netagent-icon.png</PackageIcon>
     <Copyright>Copyright (c) 2026 Bruno Capuano</Copyright>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\..\assets\logo\elbruno-netagent-icon.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>
