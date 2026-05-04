@@ -90,6 +90,14 @@ public class NetAgentOptions
     public string LogLevel { get; set; } = "Information";
 
     /// <summary>
+    /// Whether live network execution is allowed.
+    /// Default: false — live execution is intentionally blocked until explicitly enabled.
+    /// This is the hard safety gate: even if DryRunMode is false, live operations
+    /// will NOT execute unless this flag is true.
+    /// </summary>
+    public bool LiveModeAllowed { get; set; } = false;
+
+    /// <summary>
     /// Whether to show toast notifications.
     /// Default: true.
     /// </summary>

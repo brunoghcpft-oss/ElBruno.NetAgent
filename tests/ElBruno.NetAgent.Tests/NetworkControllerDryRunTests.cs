@@ -119,33 +119,34 @@ public class NetworkControllerDryRunTests
     #region Safety rules tests
 
     [Fact]
-    public async Task PreferInterfaceAsync_LiveMode_ReturnsNotImplemented()
+    public async Task PreferInterfaceAsync_LiveMode_ReturnsDryRunBecauseLiveBlocked()
     {
-        // Arrange
+        // Arrange — Live mode requested, but LiveModeAllowed defaults to false
+        // The safety gate forces DryRun
         var controller = CreateController(NetworkSwitchMode.Live);
 
         // Act
         var result = await controller.PreferInterfaceAsync("eth-1");
 
-        // Assert
-        Assert.False(result.Succeeded);
-        Assert.False(result.IsDryRun);
-        Assert.Contains("not yet implemented", result.Message);
+        // Assert — safety gate forces dry-run
+        Assert.True(result.IsDryRun, "Safety gate must force dry-run when LiveModeAllowed is false");
+        Assert.True(result.Succeeded);
+        Assert.Contains("Dry-run", result.Message);
     }
 
     [Fact]
-    public async Task RestoreAutomaticMetricsAsync_LiveMode_ReturnsNotImplemented()
+    public async Task RestoreAutomaticMetricsAsync_LiveMode_ReturnsDryRunBecauseLiveBlocked()
     {
-        // Arrange
+        // Arrange — Live mode requested, but LiveModeAllowed defaults to false
         var controller = CreateController(NetworkSwitchMode.Live);
 
         // Act
         var result = await controller.RestoreAutomaticMetricsAsync();
 
-        // Assert
-        Assert.False(result.Succeeded);
-        Assert.False(result.IsDryRun);
-        Assert.Contains("not yet implemented", result.Message);
+        // Assert — safety gate forces dry-run
+        Assert.True(result.IsDryRun);
+        Assert.True(result.Succeeded);
+        Assert.Contains("Dry-run", result.Message);
     }
 
     [Fact]

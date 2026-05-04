@@ -42,6 +42,22 @@ public class ConfigurationValidator
             errors.Add("At least one ping endpoint must be configured.");
         }
 
+        // Phase 10: Hard safety rules — these are errors, not warnings
+        if (!options.DryRunMode)
+        {
+            errors.Add("DryRunMode must be true. Live network execution is intentionally blocked by default.");
+        }
+
+        if (options.AutoModeEnabled)
+        {
+            errors.Add("AutoModeEnabled must be false. Automatic switching requires explicit opt-in.");
+        }
+
+        if (options.LiveModeAllowed)
+        {
+            errors.Add("LiveModeAllowed must be false. Live network execution is intentionally blocked by default.");
+        }
+
         return errors;
     }
 }

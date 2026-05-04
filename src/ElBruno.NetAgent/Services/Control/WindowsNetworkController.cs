@@ -16,6 +16,7 @@ public class WindowsNetworkController : INetworkController
     private readonly IWindowsAdminService _adminService;
     private readonly IAuditLogService _auditLog;
     private readonly NetworkSwitchMode _mode;
+    private readonly bool _liveModeAllowed;
 
     /// <summary>
     /// Creates a new WindowsNetworkController.
@@ -29,11 +30,34 @@ public class WindowsNetworkController : INetworkController
         IWindowsAdminService adminService,
         IAuditLogService auditLog,
         NetworkSwitchMode mode = NetworkSwitchMode.DryRun)
+        : this(logger, adminService, auditLog, mode, liveModeAllowed: false)
+    {
+    }
+
+    /// <summary>
+    /// Creates a new WindowsNetworkController with explicit live mode control.
+    /// </summary>
+    /// <param name="logger">Logger for recording intended actions.</param>
+    /// <param name="adminService">Admin elevation detector.</param>
+    /// <param name="auditLog">Audit log service for recording simulated actions.</param>
+    /// <param name="mode">Execution mode — defaults to DryRun.</param>
+    /// <param name="liveModeAllowed">Whether live network execution is permitted. Default: false.</param>
+    public WindowsNetworkController(
+        ILogger<WindowsNetworkController> logger,
+        IWindowsAdminService adminService,
+        IAuditLogService auditLog,
+        NetworkSwitchMode mode,
+        bool liveModeAllowed)
     {
         _logger = logger;
         _adminService = adminService;
         _auditLog = auditLog;
-        _mode = mode;
+        _liveModeAllowed = liveModeAllowed;
+
+        // Phase 10: Hard safety gate — if live mode is not explicitly allowed, force dry-run
+        _mode = (_liveModeAllowed && mode == NetworkSwitchMode.Live)
+            ? NetworkSwitchMode.Live
+            : NetworkSwitchMode.DryRun;
     }
 
     public async Task<NetworkSwitchResult> PreferInterfaceAsync(string interfaceId, CancellationToken cancellationToken = default)
