@@ -52,7 +52,17 @@ public partial class App : Application
                 services.AddSingleton<Services.Network.INetworkInventoryService, Services.Network.NetworkInventoryService>();
                 services.AddSingleton<Services.Monitoring.INetworkQualityService, Services.Monitoring.PingNetworkQualityService>();
                 services.AddSingleton<Services.Decision.INetworkDecisionEngine, Services.Decision.NetworkDecisionEngine>();
-                services.AddSingleton<TrayIconService>();
+                services.AddSingleton<Services.Control.INetworkController, Services.Control.WindowsNetworkController>(
+                    sp => new Services.Control.WindowsNetworkController(
+                        sp.GetRequiredService<ILogger<Services.Control.WindowsNetworkController>>(),
+                        new Infrastructure.Windows.WindowsAdminService(),
+                        sp.GetRequiredService<Services.Audit.IAuditLogService>(),
+                        Core.Enums.NetworkSwitchMode.DryRun));
+                services.AddSingleton<Infrastructure.Windows.IWindowsAdminService, Infrastructure.Windows.WindowsAdminService>();
+                services.AddSingleton<Services.Audit.IAuditLogService, Services.Audit.InMemoryAuditLogService>();
+                services.AddSingleton<TrayIconService>(sp => new TrayIconService(
+                    sp.GetRequiredService<ILogger<TrayIconService>>(),
+                    sp.GetRequiredService<Services.Audit.IAuditLogService>()));
 
                 // Register hosted service for tray lifecycle
                 services.AddHostedService<TrayHostedService>();
