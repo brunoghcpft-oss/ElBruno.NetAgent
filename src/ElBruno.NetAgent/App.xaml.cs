@@ -51,6 +51,7 @@ public partial class App : Application
                 services.AddSingleton<Services.Configuration.IConfigurationService, Services.Configuration.ConfigurationService>();
                 services.AddSingleton<Services.Network.INetworkInventoryService, Services.Network.NetworkInventoryService>();
                 services.AddSingleton<Services.Monitoring.INetworkQualityService, Services.Monitoring.PingNetworkQualityService>();
+                services.AddSingleton<Services.Decision.INetworkDecisionEngine, Services.Decision.NetworkDecisionEngine>();
                 services.AddSingleton<TrayIconService>();
 
                 // Register hosted service for tray lifecycle
