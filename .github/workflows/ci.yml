@@ -1,4 +1,7 @@
-name: CI
+name: CI - Packaging Validation (No Publish)
+# Phase 13: CI validates restore, build, test, pack, and runs local package smoke test.
+# This workflow does NOT publish to NuGet and does NOT execute the application.
+# No secrets are required.
 
 on:
   push:
@@ -7,8 +10,8 @@ on:
   pull_request:
 
 jobs:
-  build:
-    name: Build and test
+  packaging:
+    name: CI Packaging Validation
     runs-on: windows-latest
 
     steps:
@@ -28,3 +31,17 @@ jobs:
 
       - name: Test
         run: dotnet test ElBruno.NetAgent.sln --configuration Release --no-build --verbosity normal
+
+      - name: Pack
+        run: dotnet pack src/ElBruno.NetAgent/ElBruno.NetAgent.csproj --configuration Release --no-build --output artifacts/packages
+
+      - name: Run local package smoke test
+        run: |
+          powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/smoke-test-local-package.ps1 -Package ./artifacts/packages/ElBruno.NetAgent.0.1.0.nupkg
+
+      - name: Upload NuGet package
+        uses: actions/upload-artifact@v4
+        with:
+          name: packages
+          path: artifacts/packages/*.nupkg
+          retention-days: 7
