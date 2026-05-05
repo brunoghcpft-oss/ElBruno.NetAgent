@@ -1,7 +1,4 @@
 name: CI - Packaging Validation (No Publish)
-# Phase 13: CI validates restore, build, test, pack, and runs local package smoke test.
-# This workflow does NOT publish to NuGet and does NOT execute the application.
-# No secrets are required.
 
 on:
   push:
@@ -19,30 +16,29 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup .NET
+      - name: Setup .NET 10
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
 
       - name: Restore
-        run: dotnet restore ElBruno.NetAgent.sln
+        run: dotnet restore .\ElBruno.NetAgent.sln
 
       - name: Build
-        run: dotnet build ElBruno.NetAgent.sln --configuration Release --no-restore
+        run: dotnet build .\ElBruno.NetAgent.sln --configuration Release --no-restore
 
       - name: Test
-        run: dotnet test ElBruno.NetAgent.sln --configuration Release --no-build --verbosity normal
+        run: dotnet test .\ElBruno.NetAgent.sln --configuration Release --no-build --verbosity minimal
 
       - name: Pack
-        run: dotnet pack src/ElBruno.NetAgent/ElBruno.NetAgent.csproj --configuration Release --no-build --output artifacts/packages
+        run: dotnet pack .\src\ElBruno.NetAgent\ElBruno.NetAgent.csproj --configuration Release --no-build --output .\artifacts
 
-      - name: Run local package smoke test
-        run: |
-          powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/smoke-test-local-package.ps1 -Package ./artifacts/packages/ElBruno.NetAgent.0.1.0.nupkg
+      - name: Smoke test local package
+        shell: pwsh
+        run: .\scripts\smoke-test-local-package.ps1 -PackagePath .\artifacts\ElBruno.NetAgent.0.1.0.nupkg
 
-      - name: Upload NuGet package
+      - name: Upload package artifact
         uses: actions/upload-artifact@v4
         with:
-          name: packages
-          path: artifacts/packages/*.nupkg
-          retention-days: 7
+          name: ElBruno.NetAgent-nupkg
+          path: artifacts/*.nupkg
