@@ -18,12 +18,13 @@ public class ConfigurationService : IConfigurationService
 
     public Core.Models.NetAgentOptions Options => _options;
 
-    public ConfigurationService(ILogger<ConfigurationService> logger)
+    public ConfigurationService(ILogger<ConfigurationService> logger, string? configDirectoryOverride = null)
     {
         _logger = logger;
         _validator = new ConfigurationValidator();
+        var configDir = configDirectoryOverride ?? Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         ConfigFilePath = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            configDir,
             "ElBruno.NetAgent",
             "config.json");
     }

@@ -336,14 +336,24 @@ public class SafetyGuardrailTests
     [Fact]
     public void SafetyChain_DefaultConfig_AllowsNoLiveExecution()
     {
-        // Arrange — simulate loading default config
-        var configService = new ConfigurationService(_configLogger);
-        var options = configService.LoadConfiguration();
+        // Arrange — simulate loading default config with an isolated temp directory
+        var tempDir = Path.Combine(Path.GetTempPath(), "ElBruno.NetAgent.Test-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(tempDir);
+        try
+        {
+            var configService = new ConfigurationService(_configLogger, tempDir);
+            var options = configService.LoadConfiguration();
 
-        // Assert — safety defaults
-        Assert.True(options.DryRunMode);
-        Assert.False(options.AutoModeEnabled);
-        Assert.False(options.LiveModeAllowed);
+            // Assert — safety defaults
+            Assert.True(options.DryRunMode);
+            Assert.False(options.AutoModeEnabled);
+            Assert.False(options.LiveModeAllowed);
+        }
+        finally
+        {
+            if (Directory.Exists(tempDir))
+                Directory.Delete(tempDir, true);
+        }
     }
 
     [Fact]
